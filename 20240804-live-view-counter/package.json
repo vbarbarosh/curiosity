@@ -1,0 +1,23 @@
+{
+  "name": "Live View Counter",
+  "version": "0.0.0",
+  "author": "Vladimir Barbarosh <vladimir.barbarosh@gmail.com>",
+  "scripts": {
+    "start": "node src/index.js",
+    "watch": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@vbarbarosh/express-helpers": "^2.1.0",
+    "@vbarbarosh/node-helpers": "^3.36.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "he": "^1.2.0",
+    "knex": "^3.1.0",
+    "mysql2": "^3.11.0",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

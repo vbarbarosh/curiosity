@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# http://www.gnu.org/software/bash/manual/bash.html#The-Set-Builtin
+# http://redsymbol.net/articles/unofficial-bash-strict-mode
+set -o nounset -o errexit -o pipefail
+
+script=`realpath $0`
+scriptdir=`dirname $script`
+scriptname=`basename $script`
+
+cd $scriptdir/..
+
+function attempt()
+{
+node -e "
+    require('dotenv/config');
+    const net = require('net');
+    const socket = net.createConnection(process.env.DB_PORT, process.env.DB_HOST);
+    'close,connect,connectionAttempt,connectionAttemptFailed,connectionAttemptTimeout,data,drain,end,error,lookup,ready,timeout'.split(',').forEach(function (name) {
+        socket.on(name, function () {
+            console.log('event', name);
+        });
+    });
+    socket.on('ready', function () {
+        process.exit(0);
+    });
+    socket.on('error', function () {
+        process.exit(1);
+    });
+"
+}
+
+# test -e .env && source .env
+# until nc -z $DB_HOST $DB_PORT; do
+until attempt; do
+    sleep 1
+    echo 'Waiting for DB to come up'
+done
